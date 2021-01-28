@@ -1,0 +1,577 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<!-- elementUI -->
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+		/>
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js">
+		</script>
+		<style>
+			body {
+                margin:0;
+            }
+            
+            /* 存放迭代测试报告内容的容器 */ .
+            sprint-test-report-content {
+                position:absolute;
+                bottom:0px;
+                left:0px;
+                right:0px;
+                background:rgba(250,248,248,0.747);
+                padding:5px 5px 5px 5px;
+                overflow:auto;
+            }
+            
+            /* 报告标题 */
+            .report-title {
+                text-align:center;
+                font-weight:bold;
+            }
+            
+            /* 手工输入内容*/ 
+            .hand-input-content {
+                font-size:14px;
+            }
+            
+            /* 报告子节点 */ 
+            .report-session,.report-sub-session {
+                border-bottom-width:1px;
+                border-bottom-style:solid;
+                border-bottom-color:rgba(217,223,223,0.9);
+                padding:10px 0px 10px 0px;
+            }
+
+            /* 存放el-table表格的div */
+            .table-wrapper-div {
+                margin-left: 1px /* 设置margin-left避免表格遮挡左侧整体边框，导致下载的pdf报告边框出现“断层”现象*/
+            }
+
+            /* 报告节点标题 */ 
+            .report-session-title {
+                font-weight:bold;
+            }
+            
+            /* 手工输入内容*/ 
+            .hand-input-content {
+                font-size:14px;
+            }
+            
+            /* 报告子节点标题 */ 
+            .report-sub-session-title {
+                font-weight:bold;
+                font-size:15px;
+                color:#4a4a4a;
+                margin:5px 2px 5px 2px;
+            }
+            
+            /* 测试计划表相关 */ 
+            .plan-table-wrapper td {
+                text-align:center;
+                padding-top:3px;
+                padding-bottom:3px;
+                font-size:14px;
+            }
+            
+            .plan-table-wrapper td>div {
+                display:inline;
+            }
+            
+            /* 名词解释\说明 */ 
+            .terminology-wrapper {
+                font-size:12px;
+            }
+            
+            .terminology-wrapper .terminology {
+                font-weight:bold;
+                margin-left:5px;
+            }
+            
+            /* 测试统计饼图样式 */
+            .doughnut-pie-chart {
+                margin:5px 0px 5px 0px;
+                display:inline-block;
+                width:400px;
+            }
+
+            /* 测试统计柱状图样式 */
+            .stacked-column-chart {
+                padding:0px 0px 0px 0px;
+                width:98%;
+            }
+
+            /* 表格相关 */
+            tr {
+                page-break-before:always;
+                page-break-after:always;
+                page-break-inside:avoid;
+            }
+             /* 支持 text area 输入框输入的值换行显示 */
+            .pre-text {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                word-break: break-all;
+            }
+		</style>
+	</head>
+	<body>
+		<div class="sprint-test-report-content">
+			<div style="height: 100%;">
+				<!-- 标题 -->
+				<div class="report-title report-session">
+					<div>
+						<span>${title}</span>
+					</div>
+				</div>
+				<div class="report-session">
+                    <div class="report-session-title">引言</div>
+                    <div>
+                         <span class="hand-input-content">${introduction}</span>
+                    </div>
+                </div>
+				<div class="report-session">
+                    <div class="report-session-title">概述</div>
+                    <div class="report-sub-session">
+                        <div class="report-sub-session-title">
+                            测试结论
+                        </div>
+                        <div>
+                            <span class="hand-input-content pre-text">${conclusion}</span>
+                        </div>
+                    </div>
+                    <div class="report-sub-session">
+                        <div class="report-sub-session-title">
+                            相关建议
+                        </div>
+                        <div>
+                            <span class="hand-input-content pre-text">${suggestion}</span>
+                        </div>
+                    </div>
+                    <div class="report-sub-session">
+                        <div class="report-sub-session-title">
+                            风险分析
+                        </div>
+                        <div>
+                            <span class="hand-input-content pre-text">${risk_analysis}</span>
+                        </div>
+                    </div>
+                </div>
+				<div class="report-session">
+					<span class="report-session-title">
+						测试计划
+					</span>
+					<div class="plan-table-wrapper">
+						<table>
+							<thead>
+								<tr>
+                                    <th style="border: none; width: 16%">
+                                        计划名称
+                                    </th>
+                                    <th style="border: none; width: 8%">
+                                        预估开始日期
+                                    </th>
+                                    <th style="border: none; width: 9%">
+                                        实际开始时间
+                                    </th>
+                                    <th style="border: none; width: 8%">
+                                        预估完成日期
+                                    </th>
+                                    <th style="border: none; width: 9%">
+                                        实际完成时间
+                                    </th>
+                                    <th style="border: none; width: 4%">
+                                        状态
+                                    </th>
+                                    <th style="border: none; width: 9%">
+                                        测试进度
+                                    </th>
+                                    <th style="border: none; width: 8%">
+                                        通过率
+                                    </th>
+                                    <th style="border: none; width: 4%">
+                                        失败
+                                    </th>
+                                    <th style="border: none; width: 5%">
+                                        阻塞
+                                    </th>
+                                    <th style="border: none; width: 4%">
+                                        未执行
+                                    </th>
+                                    <th style="border: none; width: 8%">
+                                        关联项目
+                                    </th>
+                                    <th style="border: none; width: 8%">
+                                        测试环境
+                                    </th>
+								</tr>
+							</thead>
+							<tbody>
+								${related_plans}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="report-session">
+					<span class="report-session-title">
+						测试范围
+					</span>
+					<div>
+						<span class="hand-input-content pre-text">${test_scope}</span>
+					</div>
+				</div>
+				<div class="report-session">
+					<span class="report-session-title">
+						测试统计
+					</span>
+					<div class="report-sub-session">
+						<!-- 饼图统计 -->
+						<span class="doughnut-pie-chart">
+							<img src="${defect_status_pie}" />
+						</span>
+						<span class="doughnut-pie-chart">
+							<img src="${defect_severity_pie}" />
+						</span>
+						<span class="doughnut-pie-chart">
+                            <img src="${defect_type_pie}" />
+					    </span>
+                        <span class="doughnut-pie-chart">
+                            <img src="${case_execution_pie}" />
+                        </span>
+                        <div class="terminology-wrapper">
+                            <span>
+                                名词解释
+                            </span>
+                            <br>
+                            <span class="terminology" style="margin-left: 0px;">
+                                消缺率：
+                            </span>
+                            <span>
+                                "已关闭"缺陷数/缺陷总数 * 100
+                            </span>
+                            <span class="terminology">
+                                已拒绝：
+                            </span>
+                            <span>
+                                扭转状态除外，不对缺陷做任何处理
+                            </span>
+                            <span class="terminology">
+                                重新打开：
+                            </span>
+                            <span>
+                                缺陷关闭后被再次打开
+                            </span>
+                            <span class="terminology">
+                                通过率：
+                            </span>
+                            <span>
+                                "通过"用例数/用例总数 * 100
+                            </span>
+                            <span class="terminology">
+                                执行率：
+                            </span>
+                            <span>
+                                (用例总数-"未执行"用例数)/用例总数 * 100
+                            </span>
+                        </div>
+                    </div>
+                    <!--缺陷根源分组统计-->
+                    ${defect_source_bar}
+
+				    <div class="report-sub-session">
+                        <div class="report-sub-session-title">
+                            个人用例执行统计
+                        </div>
+                        <div class="table-wrapper-div">
+                            <div class="el-table el-table--fit el-table--striped el-table--border">
+                                <div class="el-table__header-wrapper">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__header"
+                                    style="width: 100%;">
+                                        <thead>
+                                            <tr class="">
+                                                <th colspan="1" rowspan="1" class="el-table_1_column_1  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        姓名
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_1_column_2  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        分配用例数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_1_column_3  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        执行用例数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_1_column_4  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        通过用例数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_1_column_5  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        用例执行率
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_1_column_6  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        用例通过率
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="el-table__body-wrapper">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__body"
+                                    style="width: 100%;">
+                                        <tbody>
+                                            ${case_execution_individual}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="terminology-wrapper">
+                            <span>
+                                名词解释
+                            </span>
+                            <br>
+                            <span class="terminology" style="margin-left: 0px;">
+                                用例执行率：
+                            </span>
+                            <span>
+                                ("分配用例数"-"执行用例数")/"分配用例数" * 100
+                            </span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="terminology">
+                                用例通过率：
+                            </span>
+                            <span>
+                                "通过用例数"/"执行用例数" * 100
+                            </span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <br>
+                            <span class="terminology" style="margin-left: 0px;">
+                                说明：
+                            </span>
+                        </div>
+				    </div>
+                    <div class="report-sub-session">
+                        <div class="report-sub-session-title">
+                            个人缺陷提交统计
+                        </div>
+                        <div class="table-wrapper-div">
+                            <div class="el-table el-table--fit el-table--striped el-table--border">
+                                <div class="el-table__header-wrapper">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__header"
+                                    style="width: 100%;">
+                                        <thead>
+                                            <tr class="">
+                                                <th colspan="1" rowspan="1" class="el-table_2_column_7  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        姓名
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_2_column_8  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        缺陷密度值
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_2_column_8  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        提交缺陷数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_2_column_9  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        致命缺陷数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_2_column_10  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        严重缺陷总数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_2_column_11  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        一般缺陷数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_2_column_12  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        轻微缺陷数
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="el-table__body-wrapper is-scrolling-none">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__body"
+                                    style="width: 100%;">
+                                        <tbody>
+                                            ${defects_created_individual}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-sub-session">
+                        <div class="report-sub-session-title">
+                            个人缺陷处理统计
+                        </div>
+                        <div class="table-wrapper-div">
+                            <div class="el-table el-table--fit el-table--striped el-table--border ">
+                                <div class="el-table__header-wrapper">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__header"
+                                    style="width: 100%;">
+                                        <thead>
+                                            <tr class="">
+                                                <th colspan="1" rowspan="1" class="el-table_3_column_13  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        姓名
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_3_column_14  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        解决缺陷数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_3_column_15  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        引发缺陷数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_3_column_15  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        缺陷密度值
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_3_column_16  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        致命缺陷数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_3_column_17  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        严重缺陷总数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_3_column_18  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        一般缺陷数
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_3_column_19  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        轻微缺陷数
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="el-table__body-wrapper is-scrolling-none">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__body"
+                                    style="width: 100%;">
+                                        <tbody>
+                                            ${defects_resolved_individual}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="terminology-wrapper">
+                            <span class="terminology" style="margin-left: 0px;">
+                                说明：
+                            </span>
+                            <span>
+                                以上致命，严重，一般，轻微缺陷数为“引发缺陷数”的细分统计
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="reportsession-title">
+                            遗留缺陷列表
+                        </div>
+                        <div class="table-wrapper-div">
+                            <div class="el-table el-table--fit el-table--striped el-table--border">
+                                <div class="el-table__header-wrapper">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__header"
+                                    style="width: 100%;">
+                                        <thead>
+                                            <tr class="">
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_20  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        缺陷ID
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_21  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        缺陷名称
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_22  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        严重级别
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_23  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        状态
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_24  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        补充说明
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_25  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        提交人
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_26  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        指派给
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_27  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        责任人
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_28  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        处理人
+                                                    </div>
+                                                </th>
+                                                <th colspan="1" rowspan="1" class="el-table_4_column_29  is-center   is-leaf">
+                                                    <div class="cell">
+                                                        所属平台
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="el-table__body-wrapper is-scrolling-none">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__body"
+                                    style="width: 100%;">
+                                        <tbody>
+                                            ${unclosed_defects}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+		    </div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,21 @@
+<template>
+    <div>
+        待开发
+    </div>
+</template>
+
+<script>
+
+
+
+export default {
+    mounted() {
+        this.$customUtils.headerMenu.initMenuComponent();        
+    }
+};
+</script>
+
+<style>
+</style>
+
+

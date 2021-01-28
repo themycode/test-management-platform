@@ -1,0 +1,215 @@
+.view-wrapper {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  overflow: hidden;
+}
+
+/* 页面左侧导航展开时的宽度 */
+.left-nav-width {
+  width: 198px;
+}
+
+/* 通用顶部栏 */
+.common-top-bar-wrapper {
+  position: relative;
+  padding: 5px;
+  margin: 2px 0px 2px 0px;
+
+  border-style: solid;
+  background: rgb(241, 239, 239);
+  border-color: rgba(172, 167, 167, 0.2);
+  border-width: 1px;
+  border-radius: 1px;
+}
+
+/* 通用顶部栏 span */
+.common-top-bar-wrapper > span {
+  font-size: 14px;
+  color: #606266;
+}
+
+/* 右键菜单面板 */
+.context-menu {
+  /* height: 150px; */
+  z-index: 999; /* 避免弹窗被遮挡 */
+  width: 130px;
+  position: fixed; /* 生成绝对位置的菜单 */
+  border-radius: 1px;
+  border: 1px solid #999999;
+  background-color: #d1caca;
+  padding: 5px;
+}
+
+/* 右键菜单项 */
+.context-menu li {
+  display: block;
+  line-height: 20px;
+  text-align: left;
+  padding: 2px;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.context-menu li:hover {
+  background-color: #a5a2a2;
+  color: #ffff;
+}
+
+/* span */
+.span-font {
+  font-size: 14px;
+  color: #606266;
+}
+
+/* Button */
+/* 设置消息确认弹窗中，取消按钮向右浮动，左magin为10px，即与确定按钮间距为10px */
+.btn-custom-cancel {
+  float: right !important;
+  margin-left: 10px !important;
+}
+
+/* Tab */
+/* 更改elementui 默认tab条样式 */
+.el-tabs__header {
+  height: 30px;
+  line-height: 30px;
+  margin: 0;
+}
+
+.el-tabs__header [class*="tabs"] {
+  height: 30px;
+  line-height: 30px;
+}
+
+.el-tabs__header .el-tabs__active-bar {
+  height: 2px;
+}
+
+.el-tabs__header .el-tabs__item {
+  padding: 0 5px !important;
+}
+
+/* Tree */
+.el-tree {
+  overflow: auto;
+}
+.el-tree > .el-tree-node {
+  min-width: 100%;
+  display: inline-block !important;
+}
+
+/* Table */
+
+.view-wrapper .table-toolbar {
+  position: relative;
+  padding: 5px;
+  margin: 2px 0px 2px 0px;
+  /* border-style: solid;
+        border-width: 1px;
+        border-color: rgba(172, 167, 167, 0.3); */
+}
+
+.view-wrapper .table-query-form {
+  position: relative;
+  margin: 2px 0px 2px 0px;
+  padding: 5px;
+  /* border-style: solid;
+  border-width: 1px;
+  border-color: rgba(172, 167, 167, 0.3); */
+}
+
+.view-wrapper .table-query-form .el-form-item {
+  margin: 0px !important;
+}
+
+.my-table {
+  position: relative;
+  margin: 2px 0px 2px 0px;
+  padding: 5px;
+  /* border-style: solid;
+  border-width: 1px;
+  border-color: rgba(172, 167, 167, 0.3);  */
+}
+
+.my-table .el-table__body-wrapper {
+  overflow-y: auto; /* 表格记录过多时，出现滚动条 */
+}
+
+.my-table .operation-col-cell-class {
+}
+
+.my-table .operation-col-cell-class .cell {
+  padding-left: 10px !important;
+  padding-right: 18px !important;
+}
+
+.my-table .operation-col-cell-class .cell .el-button--danger {
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+.my-table .operation-col-cell-class .cell .el-button {
+  margin-left: 5px !important;
+  /* margin-right: 5px; */
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.table-pagination {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin: 2px 0px 2px 0px;
+  padding: 5px;
+  /* border-style: solid;
+  border-width: 1px;
+  border-color: rgba(172, 167, 167, 0.3); */
+}
+
+/* 解决elementUI 表格出现滚动条时，表头和列表位置“错位”的问题 */
+.el-table--border th.gutter:last-of-type {
+  display: block !important;
+  width: 17px !important;
+}
+
+/* Dialog */
+.my-dialog-body {
+  position: relative;
+  border-style: solid;
+  border-width: 1px;
+  border-style: solid;
+  background: rgba(241, 239, 239, 0.4);
+  border-color: rgb(204, 206, 206);
+  padding: 20px 10px 10px 10px;
+  margin: 10px 10px 10px 10px;
+}
+
+.my-dialog-body .el-form-item {
+  margin-right: 50px;
+}
+
+.dialog-footer-form-item {
+  margin-right: 0px !important;
+}
+
+.my-dialog-footer {
+  text-align: center;
+  margin-left: -120px;
+}
+
+.dialog-footer {
+    text-align: center !important;
+    position: relative;
+}
+
+.el-dialog__body {
+  padding-top: 0px !important;
+}
+
+.el-dialog__footer{
+    text-align: center !important;
+}
